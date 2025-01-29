@@ -6,7 +6,51 @@
     <title>CSV Merge and Preview</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Custom styling */
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .preview-container {
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 400px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -14,45 +58,38 @@
         <h2>Merge CSV Files</h2>
         <form method="POST" enctype="multipart/form-data">
             <div id="file-inputs">
-                <!-- Initial two file inputs for df1 and df2 -->
                 <div class="form-group">
-                    <label for="file1">Upload First CSV (df1):</label>
+                    <label for="file1">Upload First CSV:</label>
                     <input type="file" class="form-control" name="file1" required>
                 </div>
                 <div class="form-group">
-                    <label for="file2">Upload Second CSV (df2):</label>
+                    <label for="file2">Upload Second CSV:</label>
                     <input type="file" class="form-control" name="file1" required>
                 </div>
             </div>
-            <div class="form-group">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="addFileInput()">+ Add More Files</button>
+            
+            <div class="form-group mt-3">
                 <label for="common_column">Enter Common Column Name:</label>
                 <input type="text" class="form-control" id="common_column" name="common_column" required>
             </div>
-        
-            <!-- Input field for the name of the merged file -->
             <div class="form-group">
                 <label for="merged_file_name">Enter Merged File Name:</label>
                 <input type="text" class="form-control" id="merged_file_name" name="merged_file_name" placeholder="merged_file.csv" required>
             </div>
-        
-            <button type="submit" class="btn btn-primary">Merge and Preview</button>
+            <button type="submit" class="btn btn-primary btn-block">Merge and Preview</button>
         </form>
         
-        <button type="button" class="btn btn-link" onclick="addFileInput()">+ Add More Files</button>
-
         {% if error_message %}
-        <div class="alert alert-danger mt-4">
-            {{ error_message }}
-        </div>
+        <div class="alert alert-danger mt-4">{{ error_message }}</div>
         {% endif %}
-
+        
         {% if preview_html %}
         <h3 class="mt-5">Preview of Merged Data</h3>
-        <div class="mb-3">
-            <p>Here is the preview of the merged file:</p>
+        <div class="preview-container">
             {{ preview_html | safe }}
         </div>
-        <a href="{{ url_for('download_file', file=merged_file_path) }}" class="btn btn-success">Download Merged File</a>
+        <a href="{{ url_for('download_file', file=merged_file_path) }}" class="btn btn-success btn-block mt-3">Download Merged File</a>
         {% endif %}
     </div>
 
@@ -62,7 +99,7 @@
             var newInput = document.createElement("div");
             newInput.classList.add("form-group");
             newInput.innerHTML = `
-                <label for="file">Upload CSV File:</label>
+                <label>Upload CSV File:</label>
                 <input type="file" class="form-control" name="file1" required>
             `;
             fileInputs.appendChild(newInput);
