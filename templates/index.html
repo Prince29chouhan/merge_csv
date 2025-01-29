@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Merge and Preview</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styling */
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Merge CSV Files</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <div id="file-inputs">
+                <!-- Initial two file inputs for df1 and df2 -->
+                <div class="form-group">
+                    <label for="file1">Upload First CSV (df1):</label>
+                    <input type="file" class="form-control" name="file1" required>
+                </div>
+                <div class="form-group">
+                    <label for="file2">Upload Second CSV (df2):</label>
+                    <input type="file" class="form-control" name="file1" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="common_column">Enter Common Column Name:</label>
+                <input type="text" class="form-control" id="common_column" name="common_column" required>
+            </div>
+        
+            <!-- Input field for the name of the merged file -->
+            <div class="form-group">
+                <label for="merged_file_name">Enter Merged File Name:</label>
+                <input type="text" class="form-control" id="merged_file_name" name="merged_file_name" placeholder="merged_file.csv" required>
+            </div>
+        
+            <button type="submit" class="btn btn-primary">Merge and Preview</button>
+        </form>
+        
+        <!-- <button type="button" class="btn btn-link" onclick="addFileInput()">+ Add More Files</button> -->
+
+        {% if error_message %}
+        <div class="alert alert-danger mt-4">
+            {{ error_message }}
+        </div>
+        {% endif %}
+
+        {% if preview_html %}
+        <h3 class="mt-5">Preview of Merged Data</h3>
+        <div class="mb-3">
+            <p>Here is the preview of the merged file:</p>
+            {{ preview_html | safe }}
+        </div>
+        <a href="{{ url_for('download_file', file=merged_file_path) }}" class="btn btn-success">Download Merged File</a>
+        {% endif %}
+    </div>
+
+    <script>
+        function addFileInput() {
+            var fileInputs = document.getElementById("file-inputs");
+            var newInput = document.createElement("div");
+            newInput.classList.add("form-group");
+            newInput.innerHTML = `
+                <label for="file">Upload CSV File:</label>
+                <input type="file" class="form-control" name="file1" required>
+            `;
+            fileInputs.appendChild(newInput);
+        }
+    </script>
+</body>
+</html>
